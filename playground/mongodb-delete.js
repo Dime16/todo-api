@@ -28,9 +28,9 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {
 	// 	console.log(result);
 	// });
 
-	db.collection('Users').deleteOne({_id: new ObjectID("5b1d27f508852b01084439ed")}).then((result) => {
-		console.log(result);
-	});
+	// db.collection('Users').deleteOne({_id: new ObjectID("5b1d27f508852b01084439ed")}).then((result) => {
+	// 	console.log(result);
+	// });
 
 //	client.close();
 });
