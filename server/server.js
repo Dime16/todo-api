@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -53,6 +54,31 @@ app.delete('/todos/:id', (req, res) => {
 	Todo.findByIdAndRemove(id).then((todo) => {
 		return todo? res.status(200).send({todo}) : res.status(404).send("Todo not found");
 	}).catch((e) => res.status(400).send("Server problems"));
+});
+
+app.patch('/todos/:id', (req, res) => {
+	let id = req.params.id;
+	let body = _.pick(req.body, ['text', 'completed']); //_.pick e lodash opcija sto ti dava da odberes koi propertis ke i gi dades na body.
+  
+    if(!ObjectID.isValid(id)) {
+    	return res.status(404).send();
+    }
+
+    if(_.isBoolean(body.completed) && body.completed) {
+    	body.completedAt = new Date().getTime();
+    } else {
+    	body.completed = false;
+    	body.completedAt = null;
+    }
+
+    Todo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((todo) => {
+    	if(!todo) {
+    		return res.status(404).send();
+    	}
+    	res.send({todo});
+    }).catch((e) => {
+    	res.status(400).send();
+    });
 });
 
 app.listen(port, () => {
